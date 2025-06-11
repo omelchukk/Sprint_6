@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,6 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class OrderPageTests {
     private WebDriver driver;
 
+    @BeforeEach
+    void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox", "--disable-dev-shm-usage");
+        driver = new ChromeDriver(options);
+        driver.get("https://qa-scooter.praktikum-services.ru/");
+    }
+
     static Stream<Arguments> personalDetailsTestData() {
         return Stream.of(
                 Arguments.of("Эдвард", "Каллен", "Ул. Пушкина, д. Колотушкина", "Сокольники", "88005553535", "07.07.2025", "двое суток", "Позвоните за 5 минут"),
@@ -25,10 +34,6 @@ public class OrderPageTests {
     @ParameterizedTest
     @MethodSource("personalDetailsTestData")
     void checkOrderTest(String name, String surname, String address, String metroName, String phone, String date, String term, String comment) {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox", "--disable-dev-shm-usage");
-        driver = new ChromeDriver(options);
-        driver.get("https://qa-scooter.praktikum-services.ru/");
 
         MainPage objMainPage = new MainPage(driver);
         objMainPage.waitForMainPageToLoad();
@@ -36,7 +41,7 @@ public class OrderPageTests {
 
         OrderPage objOrderPage = new OrderPage(driver);
         objOrderPage.waitForOrderPageToLoad();
-        objOrderPage.enterPersonalDetails(name, surname, address, metroName, phone);
+        objOrderPage.enterPersonalDetails(name, surname, address, phone);
         objOrderPage.selectMetro(metroName);
         objOrderPage.pressCookieButton();
         objOrderPage.pressNextButton();

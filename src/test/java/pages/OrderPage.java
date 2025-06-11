@@ -26,9 +26,7 @@ public class OrderPage {
     //Адрес
     private final By addressInput = By.xpath("//input[@placeholder='* Адрес: куда привезти заказ']");
     //Поле станций метро
-    private final By metroInput = By.cssSelector(".Header_Nav__AGCXC > .Button_Button__ra12g");
-    //Элементы станций метро
-    private final By metroListElements = By.xpath(".//div[@class='select-search__select']//div[starts-with(@class,'Order_Text')]");
+    private final By metroInput = By.className("select-search__input");
     //Кнопка куки
     private final By cookieButton = By.xpath("//*[@id=\"rcc-confirm-button\"]");
     //Телефон
@@ -39,8 +37,6 @@ public class OrderPage {
     private final By dateInput = By.xpath("//input[@placeholder='* Когда привезти самокат']");
     //Выбор срока аренды
     private final By termDropdown = By.className("Dropdown-root");
-    //Выбранное количество суток
-    private final By termSelected = By.className("Dropdown-option");
     //Цвет самоката
     private final By colorInput = By.xpath(".//div[starts-with(@class, 'Order_Checkboxes')]//label");
     //Комментарий
@@ -59,7 +55,7 @@ public class OrderPage {
                 .until(ExpectedConditions.visibilityOfElementLocated(orderForm));
     }
 
-    public void enterPersonalDetails(String name, String surname, String address, String metro, String phone) {
+    public void enterPersonalDetails(String name, String surname, String address, String phone) {
         driver.findElement(nameInput).sendKeys(name);
         driver.findElement(surnameInput).sendKeys(surname);
         driver.findElement(addressInput).sendKeys(address);
@@ -68,7 +64,7 @@ public class OrderPage {
     public void selectMetro(String metroName) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        WebElement input = wait.until(ExpectedConditions.elementToBeClickable(By.className("select-search__input")));
+        WebElement input = wait.until(ExpectedConditions.elementToBeClickable(metroInput));
         input.click();
         input.sendKeys(metroName);
 
@@ -86,7 +82,6 @@ public class OrderPage {
         driver.findElement(dateInput).sendKeys(Keys.ENTER);
     }
 
-
     public void pressCookieButton() {
         driver.findElement(cookieButton).click();
     }
@@ -95,7 +90,7 @@ public class OrderPage {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.className("Dropdown-root")));
+        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(termDropdown));
         dropdown.click();
 
         By termOption = By.xpath(String.format("//div[contains(@class, 'Dropdown-option') and text()='%s']", term));

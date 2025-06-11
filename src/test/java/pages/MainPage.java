@@ -52,18 +52,22 @@ public class MainPage {
                 .until(ExpectedConditions.visibilityOf(panels.get(index)));
     }
 
-    public void accordionItemGetText(int index) {
-        driver.findElements(accordionItems).get(index).getText();
+    public String accordionItemGetText(int index) {
+        List<WebElement> panels = driver.findElements(accordionItems);
+        if (index < panels.size()) {
+            return panels.get(index).getText();
+        }
+       else return "";
     }
 
 
-    public void isAccordionTextDisplayed(int index) {
+    public boolean isCorrectTextDisplayed(int index) {
         List<WebElement> panels = driver.findElements(accordionItems);
         if (index < panels.size()) {
             panels.get(index).isDisplayed();
         }
+        return true;
     }
-
 
     public void clickOrderButtonTop() {
         driver.findElement(orderButtonTop).click();
